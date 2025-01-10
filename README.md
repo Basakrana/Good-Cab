@@ -5,12 +5,11 @@
 ## Project Overview
 
 **Domain:** Transportation & Mobility  
-**Function:** Operations  
 **Project Title:** Performance Assessment of Goodcabs for 2024 Targets
 
 Goodcabs, a rapidly growing cab service company in India, has made a strong impact by focusing on tier-2 cities. With a commitment to supporting local drivers and ensuring high-quality service for passengers, Goodcabs operates across ten tier-2 cities. For 2024, the company aims to drive growth and improve passenger satisfaction, with key performance targets in mind.
 
-The management team, led by Bruce Haryali (Chief of Operations), seeks insights into Goodcabs’ performance across critical metrics, including trip volume, passenger satisfaction, repeat passenger rate, trip distribution, and the balance between new and repeat passengers. To achieve this, the data analysis task has been assigned to Peter Pandey, a data analyst at Goodcabs.
+The management team, led by Bruce Haryali (Chief of Operations), seeks insights into Goodcabs’ performance across critical metrics, including trip volume, passenger satisfaction, repeat passenger rate, trip distribution, and the balance between new and repeat passengers. To achieve this, the data analysis task has been assigned to me, as a data analyst at Goodcabs.
 
 This project will involve data exploration, answering key business questions, generating reports, and designing an interactive dashboard, with insights presented to the Chief of Operations.
 
@@ -25,30 +24,30 @@ The primary goal is to analyze Goodcabs’ performance and generate actionable i
 
 ## Task Breakdown
 
-As Peter Pandey, you are tasked with the following activities:
+As Data Analyst, I tasked with the following activities:
 
 ### 1. Data Review and Analysis:
 - **Review Metadata:** Thoroughly analyze the metadata to understand the structure, variables, and relationships in the datasets.
-- **Analyze Datasets:** Use your chosen tools (Python, SQL, PowerBI, Tableau, Excel) to conduct an in-depth analysis of the data.
+- **Analyze Datasets:** I chosen tools (MySQL & PowerBI) to conduct an in-depth analysis of the data.
 
 ### 2. Answer Key Business Questions:
 - **Primary and Secondary Questions:** Refer to the ‘primary_and_secondary_questions.pdf’ document for guidance. Analyze the data and answer the business questions using appropriate tools and techniques.
 
 ### 3. Dashboard Creation:
-- **Design Interactive Dashboard:** Create a dashboard that presents key metrics and insights in an easily understandable format. Ensure that the dashboard is intuitive and visually appealing.
+- **Design Interactive Dashboard:** Created a dashboard that presents key metrics and insights in an easily understandable format. Ensures that the dashboard is intuitive and visually appealing.
 
 ### 4. Ad-hoc Reporting:
-- **Business-Specific SQL Reports:** Review the ‘ad-hoc-requests.pdf’ document for specific business questions that require SQL-based reports. Create and present these reports using SQL queries.
+- **Business-Specific SQL Reports:** Review the ‘ad-hoc-requests.pdf’ document for specific business questions that require SQL-based reports. Created and present these reports using SQL queries.
 
 ### 5. Presentation Creation:
-- **Actionable Insights:** Prepare a convincing presentation for the Chief of Operations. Ensure the insights are clear, concise, and actionable, helping to shape the company’s strategy for 2024.
+- **Actionable Insights:** Prepared a convincing presentation for the Chief of Operations. Ensure the insights are clear, concise, and actionable, helping to shape the company’s strategy for 2024.
 
 ## Tools and Technologies
 
 The following tools and technologies can be used for the analysis and reporting:
 
-- **Data Analysis & Processing:** Python, SQL, Excel
-- **Data Visualization:** PowerBI, Tableau
+- **Data Analysis & Processing:** MySQL
+- **Data Visualization:** PowerBI
 - **Presentation:** PowerPoint
 
 ## Workflow
@@ -61,7 +60,7 @@ The following tools and technologies can be used for the analysis and reporting:
    - Use the business questions provided in the ‘primary_and_secondary_questions.pdf’ to guide your analysis.
    - Identify trends, correlations, and key insights.
 
-3. **Step 3: Create Interactive Dashboard**
+3. **Step 3: Created Interactive Dashboard**
    - Build a user-friendly dashboard that highlights key performance metrics.
    - Include visualizations such as charts, graphs, and heatmaps to make the data easy to understand.
 
