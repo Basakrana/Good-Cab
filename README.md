@@ -88,10 +88,4 @@ The project must be completed urgently. The key milestones include:
 4. **Day 6:** Preparing and refining the presentation.
 5. **Day 7:** Deliver the insights and present to the Chief of Operations.
 
-## Contact Information
-
-For any queries or further assistance, please reach out to:
-- **Peter Pandey (Data Analyst)**  
-- **Tony Sharma (Analytics Manager)**  
-- **Bruce Haryali (Chief of Operations)**
 
