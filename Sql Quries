@@ -9,6 +9,35 @@ Below are the SQL queries for each business request.
 This report displays the total trips, average fare per km, average fare per trip, and the percentage contribution of each city's trips to the overall trips.
 
 ```sql
+    SELECT
+      	CITY_NAME,
+      	COUNT(TRIP_ID) AS Total_Trips,
+      	SUM(FARE_AMOUNT) / SUM(DISTANCE_TRAVELLED_KM) AS Avg_fare_per_km,
+      	SUM(FARE_AMOUNT) / COUNT(TRIP_ID) AS Avg_fare_per_trip,
+      	ROUND(100*(COUNT(TRIP_ID)*1.0) / (
+              SELECT COUNT(TRIP_ID) FROM FACT_TRIPS
+          ),2) AS percentage_contribution_to_total_trips
+    FROM
+      	FACT_TRIPS
+      	JOIN DIM_CITY ON FACT_TRIPS.CITY_ID = DIM_CITY.CITY_ID
+    GROUP BY
+      	CITY_NAME;
+
+Sure! Below is the GitHub markdown code that includes your business request SQL queries. This will help you organize the SQL reports and make the content easy to share in your GitHub repository.
+
+markdown
+Copy code
+# Goodcabs SQL Business Reports
+
+This repository contains the SQL queries that were used to generate business reports for Goodcabs. These reports cover various aspects of the cab service performance, focusing on cities, passenger behaviors, and revenue analysis. 
+
+Below are the SQL queries for each business request.
+
+## Business Request - 1: City-Level Fare and Trip Summary Report
+
+This report displays the total trips, average fare per km, average fare per trip, and the percentage contribution of each city's trips to the overall trips.
+
+```sql
 SELECT
   	CITY_NAME,
   	COUNT(TRIP_ID) AS Total_Trips,
@@ -22,3 +51,191 @@ FROM
   	JOIN DIM_CITY ON FACT_TRIPS.CITY_ID = DIM_CITY.CITY_ID
 GROUP BY
   	CITY_NAME;
+
+
+## Business Request - 2: Monthly City-Level Trips Target Performance Report
+This report evaluates the target performance for trips at the monthly and city level. It compares actual total trips with target trips and categorizes the performance.
+
+```sql
+
+WITH cte1 AS(
+  SELECT city_name,
+         month_name,
+         COUNT(trip_id) AS actual_trips
+  FROM dim_city c
+  JOIN fact_trips t ON c.city_id=t.city_id
+  JOIN dim_date d ON d.date=t.date
+  GROUP BY 1,2)
+  
+SELECT c.city_name,
+         c.month_name,
+  	   actual_trips,
+         target_trips,
+         CASE WHEN actual_trips > target_trips THEN "Above Target"
+              WHEN actual_trips <= target_trips THEN "Below Target"
+  	   END AS performance_status,
+         ROUND((actual_trips-target_trips)/target_trips*100,2) AS "difference_%"
+FROM cte1 c 
+JOIN (SELECT  city_name,
+                MONTHNAME(month) AS month_name,
+                total_target_trips AS target_trips
+  	 FROM targets_db.monthly_target_trips t 
+  	 JOIN dim_city c ON t.city_id=c.city_id) x ON c.city_name=x.city_name AND c.month_name=x.month_name
+ORDER BY 6 DESC;
+
+
+## Business Request - 3: City-Level Repeat Passenger Trip Frequency Report
+This report shows the percentage distribution of repeat passengers by the number of trips they have taken in each city.
+
+```sql
+
+SELECT
+  	CITY_name,
+  	ROUND(SUM(
+  		CASE
+  			WHEN TRIP_COUNT = '2-Trips' THEN REPEAT_PASSENGER_COUNT
+  			ELSE 0
+  		END *1.00
+  	)*100/SUM(REPEAT_PASSENGER_COUNT),2) AS TRIP_2,
+  	ROUND(SUM(
+  		CASE
+  			WHEN TRIP_COUNT = '3-Trips' THEN REPEAT_PASSENGER_COUNT
+  			ELSE 0
+  		END *1.00
+  	)*100/SUM(REPEAT_PASSENGER_COUNT),2) AS TRIP_3,
+  	ROUND(SUM(
+  		CASE
+  			WHEN TRIP_COUNT = '4-Trips' THEN REPEAT_PASSENGER_COUNT
+  			ELSE 0
+  		END *1.00
+  	)*100/SUM(REPEAT_PASSENGER_COUNT),2) AS TRIP_4,
+  	ROUND(SUM(
+  		CASE
+  			WHEN TRIP_COUNT = '5-Trips' THEN REPEAT_PASSENGER_COUNT
+  			ELSE 0
+  		END *1.00
+  	)*100/SUM(REPEAT_PASSENGER_COUNT),2) AS TRIP_5,
+  	ROUND(SUM(
+  		CASE
+  			WHEN TRIP_COUNT = '6-Trips' THEN REPEAT_PASSENGER_COUNT
+  			ELSE 0
+  		END *1.00
+  	)*100/SUM(REPEAT_PASSENGER_COUNT),2) AS TRIP_6,
+  	ROUND(SUM(
+  		CASE
+  			WHEN TRIP_COUNT = '7-Trips' THEN REPEAT_PASSENGER_COUNT
+  			ELSE 0
+  		END *1.00
+  	)*100/SUM(REPEAT_PASSENGER_COUNT),2) AS TRIP_7,
+  	ROUND(SUM(
+  		CASE
+  			WHEN TRIP_COUNT = '8-Trips' THEN REPEAT_PASSENGER_COUNT
+  			ELSE 0
+  		END *1.00
+  	)*100/SUM(REPEAT_PASSENGER_COUNT),2) AS TRIP_8,
+  	ROUND(SUM(
+  		CASE
+  			WHEN TRIP_COUNT = '9-Trips' THEN REPEAT_PASSENGER_COUNT
+  			ELSE 0
+  		END *1.00
+  	)*100/SUM(REPEAT_PASSENGER_COUNT),2) AS TRIP_9,
+  	ROUND(SUM(
+  		CASE
+  			WHEN TRIP_COUNT = '10-Trips' THEN REPEAT_PASSENGER_COUNT
+  			ELSE 0
+  		END *1.00
+  	)*100/SUM(REPEAT_PASSENGER_COUNT),2) AS TRIP_10
+FROM
+  	DIM_REPEAT_TRIP_DISTRIBUTION 
+JOIN dim_city ON dim_city.city_id = DIM_REPEAT_TRIP_DISTRIBUTION.city_id
+GROUP BY
+  	CITY_name;
+
+
+## Business Request - 4: Identify Cities with Highest and Lowest Total New Passengers
+This report calculates the total new passengers for each city and ranks them. It identifies the top 3 cities with the highest number of new passengers as well as the bottom 3 cities with the lowest.
+
+```sql
+
+WITH city_sum AS (
+  	SELECT d.city_name, SUM(f.new_passengers) AS total_passengers
+  	FROM fact_passenger_summary f
+  	JOIN dim_city d ON f.city_id = d.city_id
+  	GROUP BY d.city_name
+),
+ranked_state AS (
+  	SELECT city_name, total_passengers,
+  	ROW_NUMBER() OVER(ORDER BY total_passengers DESC) AS descrank,
+  	ROW_NUMBER() OVER(ORDER BY total_passengers ASC) AS ascrank
+  	FROM city_sum
+)
+SELECT city_name, total_passengers,
+  CASE WHEN descrank <= 3 THEN 'Top 3'
+       WHEN ascrank <= 3 THEN 'Bottom 3'
+  END AS category
+FROM ranked_state
+WHERE descrank <= 3 OR ascrank <= 3
+ORDER BY total_passengers DESC;
+
+
+## Business Request - 5: Identify Month with Highest Revenue for Each City
+This report identifies the month with the highest revenue for each city, displaying the month name, revenue amount, and the percentage contribution of that month's revenue to the city's total revenue.
+
+```sql
+
+WITH first_month AS (
+  	SELECT 
+      city_name,
+      TO_CHAR(date, 'Month') AS Month_name,
+      SUM(fare_amount) AS total_fare_amount,
+      ROW_NUMBER() OVER (PARTITION BY city_name ORDER BY SUM(fare_amount) DESC) AS ranking
+  FROM 
+      fact_trips
+  JOIN 
+      dim_city ON dim_city.city_id = fact_trips.city_id
+  GROUP BY 
+      city_name, TO_CHAR(date, 'Month')
+  ORDER BY 
+      total_fare_amount DESC),
+states AS (
+  	SELECT city_name, SUM(total_fare_amount) AS cur
+  	FROM first_month
+  	GROUP BY 
+      city_name
+)
+SELECT states.city_name, total_fare_amount, Month_name, ROUND(100 * total_fare_amount / cur, 2)
+FROM first_month
+JOIN states ON first_month.city_name = states.city_name
+WHERE ranking = 1;
+
+
+## Business Request - 6: Repeat Passenger Rate Analysis
+This report calculates the repeat passenger rate both monthly and city-wide. It provides insights into repeat passenger behavior and trends across months.
+
+```sql
+
+WITH cte AS (
+  SELECT c.city_name,
+         TO_CHAR(month, 'Month') AS month,
+         SUM(total_passengers) AS total_passengers,
+         SUM(repeat_passengers) AS repeat_passengers,
+         ROUND((SUM(repeat_passengers * 1.00) / SUM(total_passengers)) * 100, 2) AS monthly_repeat_passenger_rate
+  FROM fact_passenger_summary ps
+  JOIN dim_city c ON ps.city_id = c.city_id
+  GROUP BY 1, 2)
+  
+SELECT c.city_name,
+       month,
+       c.total_passengers,
+       c.repeat_passengers,
+       monthly_repeat_passenger_rate,
+       city_repeat_passenger_rate
+FROM cte c 
+JOIN (SELECT c.city_name,
+             SUM(total_passengers) AS total_passengers,
+             SUM(repeat_passengers) AS repeat_passengers,
+             ROUND((SUM(1.00 * repeat_passengers) / SUM(total_passengers)) * 100, 2) AS city_repeat_passenger_rate
+      FROM fact_passenger_summary ps
+      JOIN dim_city c ON ps.city_id = c.city_id
+      GROUP BY 1) x ON c.city_name = x.city_name
+ORDER BY c.city_name;
