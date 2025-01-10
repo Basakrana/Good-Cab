@@ -1,0 +1,24 @@
+# Goodcabs SQL Business Reports
+
+This repository contains the SQL queries that were used to generate business reports for Goodcabs. These reports cover various aspects of the cab service performance, focusing on cities, passenger behaviors, and revenue analysis. 
+
+Below are the SQL queries for each business request.
+
+## Business Request - 1: City-Level Fare and Trip Summary Report
+
+This report displays the total trips, average fare per km, average fare per trip, and the percentage contribution of each city's trips to the overall trips.
+
+```sql
+SELECT
+  	CITY_NAME,
+  	COUNT(TRIP_ID) AS Total_Trips,
+  	SUM(FARE_AMOUNT) / SUM(DISTANCE_TRAVELLED_KM) AS Avg_fare_per_km,
+  	SUM(FARE_AMOUNT) / COUNT(TRIP_ID) AS Avg_fare_per_trip,
+  	ROUND(100*(COUNT(TRIP_ID)*1.0) / (
+          SELECT COUNT(TRIP_ID) FROM FACT_TRIPS
+      ),2) AS percentage_contribution_to_total_trips
+FROM
+  	FACT_TRIPS
+  	JOIN DIM_CITY ON FACT_TRIPS.CITY_ID = DIM_CITY.CITY_ID
+GROUP BY
+  	CITY_NAME;
