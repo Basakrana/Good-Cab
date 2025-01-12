@@ -1,4 +1,4 @@
-# Good-Cab | [Dasboard Link](https://app.powerbi.com/view?r=eyJrIjoiNzdlMjZiM2ItY2JiZS00MzVhLTg5MjEtYzI1Y2JlN2U1YzU2IiwidCI6ImMzZTI1MGExLTVkYzAtNGFlMS04MDNkLTgwN2FlZjE2YjM4MyJ9)
+# Good-Cab | [Dasboard Link](https://app.powerbi.com/view?r=eyJrIjoiNzdlMjZiM2ItY2JiZS00MzVhLTg5MjEtYzI1Y2JlN2U1YzU2IiwidCI6ImMzZTI1MGExLTVkYzAtNGFlMS04MDNkLTgwN2FlZjE2YjM4MyJ9) | [Presentation Link](https://github.com/Basakrana/Good-Cab/blob/main/good%20cab.pdf)
 
 # Goodcabs Performance Analytics - Data Analysis & Reporting Project
 
